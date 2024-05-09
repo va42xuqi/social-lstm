@@ -212,20 +212,20 @@ class DataLoader():
             # if training mode, read train file to pandas dataframe and process
             if self.infer is False:
                 df = pd.read_csv(directory, dtype={'frame_num':'int','ped_id':'int' }, delimiter = ' ',  header=None, names=column_names)
-                self.target_ids = np.array(df.drop_duplicates(subset={'ped_id'}, keep='first', inplace=False)['ped_id'])
+                self.target_ids = np.array(df.drop_duplicates(subset=['ped_id'], keep='first', inplace=False)['ped_id'])
 
 
             else:
                 # if validation mode, read validation file to pandas dataframe and process
                 if self.additional_validation:
                     df = pd.read_csv(directory, dtype={'frame_num':'int','ped_id':'int' }, delimiter = ' ',  header=None, names=column_names)
-                    self.target_ids = np.array(df.drop_duplicates(subset={'ped_id'}, keep='first', inplace=False)['ped_id'])
+                    self.target_ids = np.array(df.drop_duplicates(subset=['ped_id'], keep='first', inplace=False)['ped_id'])
 
                 # if test mode, read test file to pandas dataframe and process
                 else:
                     column_names = ['frame_num','ped_id','y','x']
                     df = pd.read_csv(directory, dtype={'frame_num':'int','ped_id':'int' }, delimiter = ' ',  header=None, names=column_names, converters = {c:lambda x: float('nan') if x == '?' else float(x) for c in ['y','x']})
-                    self.target_ids = np.array(df[df['y'].isnull()].drop_duplicates(subset={'ped_id'}, keep='first', inplace=False)['ped_id'])
+                    self.target_ids = np.array(df[df['y'].isnull()].drop_duplicates(subset=['ped_id'], keep='first', inplace=False)['ped_id'])
 
             # convert pandas -> numpy array
             data = np.array(df)
@@ -619,7 +619,7 @@ class DataLoader():
 
     def get_directory_name_with_pointer(self, pointer_index):
         # get directory name using pointer index
-        folder_name = self.data_dirs[pointer_index].split('/')[-2]
+        folder_name = os.path.normpath(self.data_dirs[pointer_index]).split(os.sep)[-2]
         return folder_name
 
     def get_all_directory_namelist(self):
@@ -629,7 +629,7 @@ class DataLoader():
 
     def get_file_path(self, base, prefix, model_name ='', offset=0):
         #return file path of file of processing or pointing by dataset pointer
-        folder_name = self.data_dirs[self.dataset_pointer+offset].split('/')[-2]
+        folder_name = os.path.normpath(self.data_dirs[self.dataset_pointer+offset]).split(os.sep)[-2]
         base_folder_name=os.path.join(prefix, base, model_name, folder_name)
         return base_folder_name
 
