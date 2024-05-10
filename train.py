@@ -7,6 +7,7 @@ import os
 import time
 import pickle
 import subprocess
+import platform
 
 from model import SocialModel
 from utils import DataLoader
@@ -107,11 +108,11 @@ def train(args):
 
     
     if not os.path.isdir("log/"):
-    print("Directory creation script is running...")
-      if platform.system() == 'Windows':
-        subprocess.call('make_directories.bat', shell=True)
-      else:
-        subprocess.call([f_prefix+'/make_directories.sh'])
+        print("Directory creation script is running...")
+        if platform.system() == 'Windows':
+            subprocess.call('make_directories.bat', shell=True)
+        else:
+            subprocess.call([f_prefix+'/make_directories.sh'])
 
     args.freq_validation = np.clip(args.freq_validation, 0, args.num_epochs)
     validation_epoch_list = list(range(args.freq_validation, args.num_epochs+1, args.freq_validation))

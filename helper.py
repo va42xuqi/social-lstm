@@ -368,7 +368,7 @@ def vectorize_seq(x_seq, PedsList_seq, lookup_seq):
     for ind, frame in enumerate(x_seq):
         for ped in PedsList_seq[ind]:
             first_values_dict[ped] = frame[lookup_seq[ped], 0:2]
-            vectorized_x_seq[ind, lookup_seq[ped], 0:2]  = frame[lookup_seq[ped], 0:2] - first_values_dict[ped][0:2]
+            vectorized_x_seq[ind, lookup_seq[ped], 0:2] = frame[lookup_seq[ped], 0:2] - first_values_dict[ped][0:2]
 
     return vectorized_x_seq, first_values_dict
 
